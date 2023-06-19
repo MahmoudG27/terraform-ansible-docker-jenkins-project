@@ -1,0 +1,8 @@
+region        = "eu-west-1"
+vpc-cidr      = "10.0.0.0/16"
+public1-cidr  = "10.0.1.0/24"
+public2-cidr  = "10.0.2.0/24"
+private1-cidr = "10.0.3.0/24"
+private2-cidr = "10.0.4.0/24"
+az1           = "eu-west-1a"
+az2           = "eu-west-1b"
