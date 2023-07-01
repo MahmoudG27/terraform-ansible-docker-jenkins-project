@@ -1,0 +1,14 @@
+- name: Install ssh on bastion host
+  hosts: bastion
+  become: true
+  tasks:
+    - name: Install openssh
+      yum:
+        name: openssh-server
+        state: latest
+
+    - name: Make sure a service unit is running
+      systemd:
+      name: sshd
+      state: started
+      enabled: true
