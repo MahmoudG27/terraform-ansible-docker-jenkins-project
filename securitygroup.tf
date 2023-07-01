@@ -19,14 +19,14 @@ resource "aws_security_group" "tf_ssh_and_3000" {
   name_prefix = "allow_ssh_and_3000_from_vpc_cidr_"
   description = "Allow SSH and port 3000 from VPC CIDR"
 
-  vpc_id = module.network.vpc_id.id
+  vpc_id = module.network.vpc_id
 
   ingress {
     description = "SSH Access"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [module.network.vpc_cidr.cidr_block]
+    cidr_blocks = module.network.vpc_cidr
   }
 
   ingress {
@@ -34,7 +34,7 @@ resource "aws_security_group" "tf_ssh_and_3000" {
     from_port   = 3000
     to_port     = 3000
     protocol    = "tcp"
-    cidr_blocks = [module.network.vpc_cidr.cidr_block]
+    cidr_blocks = module.network.vpc_cidr
   }
 
   tags = {
