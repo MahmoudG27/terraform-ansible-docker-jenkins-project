@@ -3,9 +3,6 @@ resource "aws_eip" "tf_eip" {
   tags = {
     Name = "tf_eip"
   }
-#  provisioner "local-exec" {
-#    command = "echo the servers ip is ${self.public_ip}"
-#  }
 }
 
 resource "aws_nat_gateway" "tf_natgw" {
