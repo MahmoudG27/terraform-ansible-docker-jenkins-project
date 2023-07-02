@@ -21,7 +21,3 @@ output "vpc_cidr" {
 output "vpc_id" {
   value = aws_vpc.tf_vpc.id
 }
-
-output "keyname" {
-  value = aws_key_pair.tf_keypair.key_name
-}
