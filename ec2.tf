@@ -3,7 +3,7 @@ resource "aws_instance" "tf_bastion" {
   ami                    = var.ec2_ami
   instance_type          = var.ec2_type
   subnet_id              = module.network.public_subnet_id1
-  key_name = aws_key_pair.tf_keypair.key_name
+  key_name               = aws_key_pair.tf_keypair.key_name
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
   provisioner "local-exec" {
@@ -20,7 +20,7 @@ resource "aws_instance" "tf_application" {
   ami                    = var.ec2_ami
   instance_type          = var.ec2_type
   subnet_id              = module.network.private_subnet_id1
-  key_name = aws_key_pair.tf_keypair.key_name
+  key_name               = aws_key_pair.tf_keypair.key_name
   vpc_security_group_ids = [aws_security_group.application_sg.id]
 
   provisioner "local-exec" {
