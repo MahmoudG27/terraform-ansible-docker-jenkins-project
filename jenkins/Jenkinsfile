@@ -2,17 +2,17 @@ pipeline {
     agent any
 
     stages {
-        stage('preparation') {
+        stage('Preparation') {
             steps {
                 git 'https://github.com/mahmoud254/jenkins_nodejs_example.git'
             }
         }
-        stage('CI') {
+        stage('Build') {
             steps {
                 sh 'docker build -t elnabatshy/nodejs:v1.0 -f dockerfile .'
             }
         }
-        stage('build') {
+        stage('Artifact') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'docker login -u $USERNAME -p $PASSWORD'
