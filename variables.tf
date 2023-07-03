@@ -36,3 +36,15 @@ variable "ec2_ami" {
 variable "ec2_type" {
   type = string
 }
+
+variable "instance_class" {
+  type = string
+}
+
+variable "username-rds" {
+  type = string
+}
+
+variable "password-rds" {
+  type = string
+}

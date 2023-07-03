@@ -8,3 +8,13 @@ module "network" {
   az1           = var.az1
   az2           = var.az2
 }
+
+module "redis-rds" {
+  source           = "./redis-rds"
+  instance_class   = var.instance_class
+  username-rds     = var.username-rds
+  password-rds     = var.password-rds
+  subnet_ids_rds   = [module.network.private_subnet_id1, module.network.private_subnet_id2]
+  subnet_ids_redis = [module.network.private_subnet_id2]
+  vpc_id           = module.network.vpc_id
+}
