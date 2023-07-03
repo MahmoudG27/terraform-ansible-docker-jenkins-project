@@ -22,7 +22,8 @@ pipeline {
         }
         stage('CD') {
             steps {
-                sh 'docker build -t elnabatshy/nodejs -f dockerfile .'
+                sh 'ssh -i {ssh-file} user@application'
+                sh 'docker run -d -p 3000:3000 elnabatshy/nodejs:v1.0'
             }
         }
     }
