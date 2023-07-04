@@ -1,6 +1,6 @@
 /*  this jenkins file for a pipeline that takes an environment parameter to
-    apply Terraform code on a certain environment.
-    first make a customize jenkins image with terraform installed inside it. */
+    apply Terraform code on a certain environment and run Ansible playbook.
+    first make image from Dockerfile exist here. */
 
 pipeline {
     agent any
@@ -26,6 +26,11 @@ pipeline {
             steps {
                 sh "terraform workspace select ${ENVIRONMENT}"
                 sh "terraform apply -var-file=variables-${ENVIRONMENT}.tfvars"
+            }
+        }
+        stage('Ansible PlayBook') {
+            steps {
+                sh "ansible-playbook ./ansible/playbook.yml"
             }
         }
     }

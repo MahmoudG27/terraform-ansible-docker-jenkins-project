@@ -2,9 +2,9 @@ pipeline {
     agent {label 'ec2-app'}
 
     stages {
-        stage('Preparation') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/mahmoud254/jenkins_nodejs_example.git'
+                checkout([$class: 'GitSCM', branches: [[name: 'rds_redis']], userRemoteConfigs: [[url: 'https://github.com/mahmoud254/jenkins_nodejs_example.git']]])
             }
         }
         stage('Build') {
@@ -22,7 +22,6 @@ pipeline {
         }
         stage('CD') {
             steps {
-                sh 'ssh -i {ssh-file} user@application'
                 sh 'docker run -d -p 3000:3000 elnabatshy/nodejs:v1.0'
             }
         }

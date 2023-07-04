@@ -18,3 +18,10 @@ module "redis-rds" {
   subnet_ids_redis = [module.network.private_subnet_id2]
   vpc_id           = module.network.vpc_id
 }
+
+module "LoadBalancer" {
+  source           = "./LoadBalancer"
+  subnets   = [module.network.private_subnet_id1, module.network.private_subnet_id2]
+  target_id = aws_instance.tf_application.id
+  vpc_id    = module.network.vpc_id
+}

@@ -2,56 +2,50 @@
   hosts: application
   gather_facts: no
   tasks:
-    - name: Install aptitude
+    - name: Update apt cache
       apt:
-        name: aptitude
-        state: latest
-        update_cache: true
-
-    - name: Install required system packages
-      apt:
-        pkg:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-          - python3-pip
-          - virtualenv
-          - python3-setuptools
-        state: latest
-        update_cache: true
-
-    - name: Add Docker GPG apt Key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker Repository
-      apt_repository:
-        repo: deb https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
-    - name: Update apt and install docker-ce
-      apt:
-        name: docker-ce
-        state: latest
-        update_cache: true
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
+        update_cache: yes
     
-    - name: Pull default Docker image
-      community.docker.docker_image:
-        name: jenkins/jenkins
-        source: pull
-
-    - name: install openJDK
+    - name: install JAVA
       apt:
         name: openjdk-8-jdk
+        state: present
 
     - name: create dir
       file:
         path: /home/ubuntu/jenkins_home
         state: directory
         mode: '0777'
+
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+        state: present
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
