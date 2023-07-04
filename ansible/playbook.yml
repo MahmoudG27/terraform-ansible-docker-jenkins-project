@@ -1,7 +1,6 @@
 - name: Configure and provision application
   hosts: application
   gather_facts: no
-  ansible_ssh_common_args: '-o ProxyCommand="ssh -W %h:%p ubuntu@{{ bastion }}"'
   tasks:
     - name: Install aptitude
       apt:
@@ -46,3 +45,13 @@
       community.docker.docker_image:
         name: jenkins/jenkins
         source: pull
+
+    - name: install openJDK
+      apt:
+        name: openjdk-8-jdk
+
+    - name: create dir
+      file:
+        path: /home/ubuntu/jenkins_home
+        state: directory
+        mode: '0777'

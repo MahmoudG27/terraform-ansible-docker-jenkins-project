@@ -7,7 +7,11 @@ resource "aws_instance" "tf_bastion" {
   vpc_security_group_ids = [aws_security_group.bastion_sg.id]
 
   provisioner "local-exec" {
-    command = "echo '[bastion]\n${self.public_ip}' ansible_ssh_private_key_file=${tls_private_key.deploy_tls.private_key_openssh}  >> ./ansible/inventory"
+    command = <<-EOT
+      ssh-copy-id -i ${tls_private_key.rsa.private_key_pem} ubuntu@${self.public_ip};
+      echo ${tls_private_key.rsa.private_key_pem}  >> privatekey.pem;
+      echo '[bastion]\n ansible_host='${self.public_ip} 'ansible_ssh_private_key_file= privatekey.pem'  >> ./ansible/inventory;
+    EOT
   }
 
   tags = {
@@ -24,7 +28,7 @@ resource "aws_instance" "tf_application" {
   vpc_security_group_ids = [aws_security_group.application_sg.id]
 
   provisioner "local-exec" {
-    command = "echo '[application]\n${self.private_ip}' ansible_ssh_private_key_file=${tls_private_key.deploy_tls.private_key_openssh}  >> ./ansible/inventory"
+    command = "echo '[application]\n ansible_host'${self.private_ip} 'ansible_ssh_common_args= -o ProxyCommand= ssh -W %h:%p -q ubuntu@'${aws_instance.tf_bastion.public_ip} -i privatekey.pem >> ./ansible/inventory"
   }
 
   tags = {
