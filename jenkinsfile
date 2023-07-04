@@ -1,0 +1,32 @@
+/*  this jenkins file for a pipeline that takes an environment parameter to
+    apply Terraform code on a certain environment.
+    first make a customize jenkins image with terraform installed inside it. */
+
+pipeline {
+    agent any
+
+    parameters {
+        string(name: 'ENVIRONMENT', defaultValue: 'dev', description: 'The environment to deploy to.')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/MahmoudG27/terraform-ansible-docker-jenkins-project.git'
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                sh "terraform workspace select ${ENVIRONMENT}"
+                sh "terraform apply -var-file=variables-${ENVIRONMENT}.tfvars"
+            }
+        }
+    }
+}
